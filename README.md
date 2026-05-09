@@ -59,3 +59,10 @@ The application follows a standard decoupled Client-Server architecture. The Rea
 
 ## 🔗 Live Deployment
 *(Live link placeholder)*
+
+## 🔒 Security Best Practices & No-Secret Policy
+This repository enforces a strict "no-secret" policy to prevent credential leaks (e.g., MongoDB URIs, API keys) to version control.
+- **Environment Setup:** All secrets must be stored locally in a `.env` file. Do not commit `.env` or any `.env.*` files. Use `cp .env.example .env` to generate a safe template.
+- **Connection Security:** MongoDB connections use `process.env.MONGO_URI` and validate its existence before app startup.
+- **API Hardening:** The backend is protected by Helmet (HTTP headers), Express Rate Limiter, and strict CORS configuration.
+- **Handling Compromised Secrets:** If a secret is ever accidentally pushed, it MUST be rotated immediately in the respective dashboard (e.g., MongoDB Atlas, GroqCloud) and purged from Git history using `git filter-repo` or BFG Repo-Cleaner.
