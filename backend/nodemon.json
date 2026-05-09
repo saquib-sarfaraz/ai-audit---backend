@@ -1,6 +1,6 @@
 {
-  "watch": ["src/", "server.js", ".env"],
+  "watch": ["src/", "server.js"],
   "ext": "js,json",
-  "ignore": ["node_modules/", "*.test.js", "test_mongo.cjs"],
-  "delay": "500"
+  "ignore": ["node_modules/", "*.test.js"],
+  "delay": "2000"
 }

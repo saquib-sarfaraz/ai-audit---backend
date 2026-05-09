@@ -19,15 +19,23 @@ app.use(compression());
 // Security Middleware
 app.use(helmet());
 
-// Dynamic production CORS
-const allowedOrigin = process.env.CLIENT_URL || "http://localhost:5173";
+// Enable CORS before routes (TEMPORARILY ALLOW ALL FOR DEBUGGING MVP)
+app.use(cors()); 
 
+/*
+PRODUCTION NOTE: Restrict origins later using explicit config:
+const allowedOrigins = ["http://localhost:5173", process.env.CLIENT_URL];
 app.use(cors({
-  origin: allowedOrigin,
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
 }));
+*/
 
 // Body parsing Middleware
 app.use(express.json({ limit: '10kb' })); // Production safeguard: limit payload size
