@@ -9,11 +9,7 @@ A production-style AI Spend Audit SaaS platform built to help startups and devel
 - **Shareable Reports:** Public URLs for easy sharing of audit results with team members.
 - **Lead Capture:** Captures emails for lead generation linked to specific audit reports.
 
-## 🖼️ Screenshots
-*(Screenshots coming soon)*
-- `[Landing Page Placeholder]`
-- `[Audit Results Dashboard Placeholder]`
-- `[Lead Capture Modal Placeholder]`
+
 
 ## 🛠️ Tech Stack
 - **Frontend:** React.js, TypeScript, Tailwind CSS, Vite
