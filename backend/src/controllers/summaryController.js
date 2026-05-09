@@ -32,8 +32,14 @@ const createSummary = async (req, res, next) => {
       annualSavings: report.annualSavings
     };
 
+    console.log("Generating summary for:", reportId);
+    
     // Generate summary via Groq
-    const summary = await generateSummary(auditData, report.recommendations, savings);
+    let summary = await generateSummary(auditData, report.recommendations, savings);
+    
+    summary = summary || "AI-generated summary unavailable.";
+
+    console.log("Groq summary:", summary);
 
     // Save summary to report
     report.summary = summary;

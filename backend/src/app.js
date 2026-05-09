@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const { errorHandler, notFound } = require('./middleware/errorMiddleware');
 
@@ -12,20 +13,25 @@ const summaryRoutes = require('./routes/summaryRoutes');
 
 const app = express();
 
+// Enable gzip compression
+app.use(compression());
+
 // Security Middleware
 app.use(helmet());
 
-// Apply CORS before body parsers and routes
+// Dynamic production CORS
+const allowedOrigin = process.env.CLIENT_URL || "http://localhost:5173";
+
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: allowedOrigin,
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 // Body parsing Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10kb' })); // Production safeguard: limit payload size
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 // Rate limiting
 const apiLimiter = rateLimit({

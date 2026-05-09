@@ -191,33 +191,41 @@ var recommendationTemplates = [
     id: "api-budgeting",
     type: "budget",
     impact: "medium",
-    title: "Add API budgets and caching",
-    description: "Set project budgets, cache common prompts, and batch requests to reduce usage-based spend.",
-    savingsPercent: 0.15
+    title: "Implement prompt caching & budgets",
+    description: "Add structured usage limits and introduce prompt caching to significantly cut overhead from recurring LLM requests.",
+    savingsPercent: 0.18
   },
   {
     id: "seat-rightsize",
     type: "optimize",
     impact: "high",
-    title: "Right-size seats to active users",
-    description: "Reduce paid seats to match active usage. Review access every 30 days.",
-    savingsPercent: 0.2
+    title: "Audit underutilized active seats",
+    description: "Prune user access for team members with sub-5 logins per week. Consolidate multi-license overhead.",
+    savingsPercent: 0.22
   },
   {
     id: "assistant-consolidation",
     type: "consolidate",
     impact: "medium",
-    title: "Consolidate overlapping assistants",
-    description: "If multiple assistant subscriptions overlap, standardize on one for most seats and keep the other for niche workflows.",
+    title: "Standardize duplicative LLM stack",
+    description: "Standardize engineering/writing pipelines onto a single foundational LLM assistant to capture volume discounts.",
     savingsPercent: 0.25
   },
   {
     id: "downgrade-plan",
     type: "downgrade",
     impact: "high",
-    title: "Downgrade plan tier for small teams",
-    description: "Teams with a few power users can often use individual tiers instead of team plans.",
-    savingsPercent: 0.3
+    title: "Offramp unnecessary Enterprise features",
+    description: "Downgrade sub-scale teams to 'Team' or 'Business' tiers. Standard plan features adequately satisfy current needs.",
+    savingsPercent: 0.35
+  },
+  {
+    id: "baseline-audit",
+    type: "process",
+    impact: "low",
+    title: "Establish recurring SaaS renewal hygiene",
+    description: "Implement quarterly review mechanics to prevent future zombie accounts and credit-card bloat.",
+    savingsPercent: 0.05
   }
 ];
 
@@ -358,8 +366,17 @@ function runMockAudit(input) {
     });
     if (rec && rec.estimatedMonthlySavingsUsd > 0) recommendations.push(rec);
   }
+  if (recommendations.length < 2) {
+    const baseRec = makeRec("baseline-audit", {
+      estimatedMonthlySavingsUsd: roundUsd(totalCurrentMonthlyUsd * 0.03)
+    });
+    if (baseRec) recommendations.push(baseRec);
+    // Adjust totals minimally
+    totalRecommendedMonthlyUsd -= (totalCurrentMonthlyUsd * 0.03);
+  }
+
   const totalMonthlySavingsUsd = roundUsd(
-    Math.max(0, totalCurrentMonthlyUsd - totalRecommendedMonthlyUsd)
+    Math.max(0, totalCurrentMonthlyUsd - Math.max(0, totalRecommendedMonthlyUsd))
   );
   const totalAnnualSavingsUsd = roundUsd(totalMonthlySavingsUsd * 12);
   return {
