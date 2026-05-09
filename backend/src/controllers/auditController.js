@@ -1,5 +1,5 @@
 const Report = require('../models/Report');
-const { calculateAudit } = require('../services/auditEngine');
+const { runMockAudit } = require('../services/auditEngine');
 const { auditSchema } = require('../utils/validators');
 
 const generateAudit = async (req, res, next) => {
@@ -13,16 +13,16 @@ const generateAudit = async (req, res, next) => {
     const { tools, teamSize, primaryUseCase } = value;
 
     // Calculate savings and recommendations
-    const auditResults = calculateAudit({ tools, teamSize });
+    const auditResults = runMockAudit({ tools, teamSize });
 
     // Create Report
     const report = await Report.create({
-      tools,
+      tools: auditResults.perTool,
       teamSize,
       primaryUseCase,
-      monthlySpend: auditResults.monthlySpend,
-      monthlySavings: auditResults.monthlySavings,
-      annualSavings: auditResults.annualSavings,
+      monthlySpend: auditResults.totalCurrentMonthlyUsd,
+      monthlySavings: auditResults.totalMonthlySavingsUsd,
+      annualSavings: auditResults.totalAnnualSavingsUsd,
       recommendations: auditResults.recommendations,
     });
 

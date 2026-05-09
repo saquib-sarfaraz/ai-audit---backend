@@ -9,10 +9,11 @@ const reportSchema = new mongoose.Schema({
     index: true,
   },
   tools: [{
-    name: String,
-    plan: String,
-    monthlySpend: Number,
-    seats: Number,
+    toolId: String,
+    currentMonthlySpendUsd: Number,
+    recommendedMonthlySpendUsd: Number,
+    monthlySavingsUsd: Number,
+    notes: [String]
   }],
   monthlySpend: {
     type: Number,

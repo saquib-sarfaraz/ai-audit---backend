@@ -11,11 +11,11 @@ const generateSummary = async (auditData, recommendations, savings) => {
     Data:
     - Team Size: ${auditData.teamSize}
     - Primary Use Case: ${auditData.primaryUseCase || 'General'}
-    - Total Monthly Spend: $${auditData.tools.reduce((acc, t) => acc + t.monthlySpend, 0)}
+    - Total Monthly Spend: $${auditData.tools.reduce((acc, t) => acc + (t.currentMonthlySpendUsd || 0), 0)}
     - Estimated Annual Savings: $${savings.annualSavings}
     
     Recommendations:
-    ${recommendations.map(r => `- ${r.action} ${r.tool}: ${r.description}`).join('\n')}
+    ${recommendations.map(r => `- ${r.type} ${r.toolId || ''}: ${r.description || ''}`).join('\n')}
     
     Provide a professional, concise, SaaS-style summary (approx 100 words). 
     Focus on actionable insights. Do not include greetings.
@@ -24,7 +24,7 @@ const generateSummary = async (auditData, recommendations, savings) => {
   try {
     const chatCompletion = await groq.chat.completions.create({
       messages: [{ role: 'user', content: prompt }],
-      model: 'llama3-8b-8192',
+      model: 'llama-3.1-8b-instant',
       temperature: 0.5,
       max_tokens: 150,
     });

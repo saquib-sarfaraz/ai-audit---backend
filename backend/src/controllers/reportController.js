@@ -3,8 +3,10 @@ const Report = require('../models/Report');
 const getReport = async (req, res, next) => {
   try {
     const { id } = req.params;
+    console.log("Requested ID:", id);
 
     const report = await Report.findOne({ reportId: id });
+    console.log("Found report:", report);
 
     if (!report) {
       return res.status(404).json({ success: false, message: 'Report not found' });

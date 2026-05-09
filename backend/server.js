@@ -27,3 +27,11 @@ process.on('unhandledRejection', (err, promise) => {
   console.error(`Error: ${err.message}`);
   server.close(() => process.exit(1));
 });
+
+// Handle nodemon restarts gracefully to prevent EADDRINUSE
+process.once('SIGUSR2', () => {
+  server.close(() => {
+    process.kill(process.pid, 'SIGUSR2');
+  });
+});
+

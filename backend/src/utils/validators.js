@@ -3,9 +3,9 @@ const Joi = require('joi');
 const auditSchema = Joi.object({
   tools: Joi.array().items(
     Joi.object({
-      name: Joi.string().required(),
-      plan: Joi.string().required(),
-      monthlySpend: Joi.number().min(0).required(),
+      toolId: Joi.string().required(),
+      planId: Joi.string().required(),
+      monthlySpendUsd: Joi.number().min(0).required(),
       seats: Joi.number().min(1).required(),
     })
   ).required(),
