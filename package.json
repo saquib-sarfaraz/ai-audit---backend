@@ -1,0 +1,11 @@
+{
+  "name": "ai-spend-audit-root",
+  "version": "1.0.0",
+  "description": "Root proxy for backend",
+  "scripts": {
+    "dev": "cd backend && npm run dev",
+    "start": "cd backend && npm start",
+    "test": "cd backend && npm test",
+    "install-backend": "cd backend && npm install"
+  }
+}
